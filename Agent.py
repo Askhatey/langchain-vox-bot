@@ -34,12 +34,15 @@ class Agent:
         text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         docs = text_splitter.split_documents(documents)
 
-        # 2. Создание векторной базы данных
+        # 2. Создание векторной базы данных с использованием OpenAI
         embeddings = OpenAIEmbeddings()
         self.vectorstore = Chroma.from_documents(docs, embeddings)
 
         # 3. Инициализация языковой модели с поддержкой стриминга
-        self.llm = ChatOpenAI(temperature=0.7, streaming=True)
+        self.llm = ChatOpenAI(
+            temperature=0.7, 
+            streaming=True
+        )
 
         # 4. Создание цепочки с кастомным промптом
         prompt = PromptTemplate(template=template, input_variables=["context", "question"])
